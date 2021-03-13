@@ -75,9 +75,9 @@ module OmniAuth
 
         # on_validation may run a Captcha or other validation mechanism
         # Must return true when validation passes, false otherwise
-        if options[:on_validation] && !options[:on_validation].call(env: env)
+        env['omniauth.identity'] = @identity if options[:on_validation]
+        if options[:on_validation] && !options[:on_validation].call(env)
           if options[:on_failed_registration]
-            env['omniauth.identity'] = @identity
             options[:on_failed_registration].call(env)
           else
             validation_message = 'Validation failed'
